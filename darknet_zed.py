@@ -541,8 +541,9 @@ def main(argv):
                 distance = math.sqrt(x * x + y * y + z * z)
                 distance = "{:.2f}".format(distance)
 
-                detection_zed = sl.ObjectData()
-                detections_zed.get_object_data_from_id(detection_zed, i)  # Get the object with ID = i
+                detection_zed = detections_zed.object_list[i]
+                # detection_zed = sl.ObjectData()
+                # detections_zed.get_object_data_from_id(detection_zed, i)  # Get the object with ID = i
 
                 if detection_zed:
                     object_id = detection_zed.id  # Get the object id
@@ -554,8 +555,10 @@ def main(argv):
                     object_action_state = detection_zed.action_state  # Get the object action state
 
                 for objecttt in detections_zed.object_list:
-                    print(str(len(detections_zed.object_list)))
+                    print("len: " + str(len(detections_zed.object_list)))
                     print("{} {}".format(objecttt.id, objecttt.dimensions[1]))
+
+                print("DetZed: " + str(detection_zed.dimensions[1]))
 
                 '''
                 else:
