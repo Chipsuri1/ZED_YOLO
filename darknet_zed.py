@@ -286,7 +286,7 @@ def enable_object_detection(zed):
 
     # Set runtime parameters
     detection_parameters_rt = sl.ObjectDetectionRuntimeParameters()
-    detection_parameters_rt.detection_confidence_threshold = 25
+    detection_parameters_rt.detection_confidence_threshold = 70
 
     # run detection for every Camera grab
     # determines if object detection runs for each frame or asynchronously in a separate thread.
@@ -309,7 +309,7 @@ def enable_object_detection(zed):
 
     return detection_parameters_rt
 
-
+'''
 def positional_tracking(zed, runtime_parameters):
     tracking_parameters = sl.PositionalTrackingParameters()
     err = zed.enable_positional_tracking(tracking_parameters)
@@ -331,6 +331,7 @@ def positional_tracking(zed, runtime_parameters):
         oz = round(zed_pose.get_orientation(py_orientation).get()[2], 3)
         ow = round(zed_pose.get_orientation(py_orientation).get()[3], 3)
         print("Orientation: ox: {0}, oy:  {1}, oz: {2}, ow: {3}\n".format(ox, oy, oz, ow))
+'''
 
 
 def get_object_depth(depth, bounds):
@@ -521,10 +522,11 @@ def main(argv):
             # log.info(chr(27) + "[2J"+"**** " + str(len(detections)) + " Results ****")
             # for detection in detections:
             for i in range(len(detections_yolo)):
+                print(i)
                 detection_yolo = detections_yolo[i]
                 label = detection_yolo[0]
                 confidence = detection_yolo[1]
-                pstring = label + ": " + str(np.rint(100 * confidence)) + "%"
+                # pstring = label + ": " + str(np.rint(100 * confidence)) + "%"
                 # log.info(pstring)
                 bounds = detection_yolo[2]
                 y_extent = int(bounds[3])
