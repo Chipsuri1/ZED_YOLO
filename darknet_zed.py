@@ -455,6 +455,7 @@ def main(argv):
     mat = sl.Mat()
     point_cloud_mat = sl.Mat()
 
+    # enable object detection
     detection_parameters_rt = enable_object_detection(zed)
 
     # Import the global variables. This lets us instance Darknet once,
@@ -505,15 +506,15 @@ def main(argv):
     key = ''
     while key != 113:  # for 'q' key
         start_time = time.time()  # start time of the loop
-        err = zed.grab(runtime_parameters)
-        if err == sl.ERROR_CODE.SUCCESS:
+        # err = zed.grab(runtime_parameters)
+        if zed.grab(runtime_parameters) == sl.ERROR_CODE.SUCCESS:
+            # get image from camera for yolo detection
             zed.retrieve_image(mat, sl.VIEW.LEFT)
             image = mat.get_data()
 
-            zed.retrieve_measure(
-                point_cloud_mat, sl.MEASURE.XYZRGBA)
+            # get depth information of camera
+            zed.retrieve_measure(point_cloud_mat, sl.MEASURE.XYZRGBA)
             depth = point_cloud_mat.get_data()
-            # positional_tracking(cam, runtime)
 
             # Do the detection
             detections_yolo = detect(netMain, metaMain, image, thresh)
@@ -522,7 +523,6 @@ def main(argv):
             # log.info(chr(27) + "[2J"+"**** " + str(len(detections)) + " Results ****")
             # for detection in detections:
             for i in range(len(detections_yolo)):
-                print(i)
                 detection_yolo = detections_yolo[i]
                 label = detection_yolo[0]
                 confidence = detection_yolo[1]
@@ -539,12 +539,9 @@ def main(argv):
                 x, y, z = get_object_depth(depth, bounds)
                 distance = math.sqrt(x * x + y * y + z * z)
                 distance = "{:.2f}".format(distance)
-                # object_height = 0
-                # object_action_state = 0
 
-                # objectt = get_object(cam, i)
                 detection_zed = sl.ObjectData()
-                detections_zed.get_object_data_from_id(detection_zed, i)  # Get the object with ID = O
+                detections_zed.get_object_data_from_id(detection_zed, i)  # Get the object with ID = i
 
                 if detection_zed:
                     object_id = detection_zed.id  # Get the object id
