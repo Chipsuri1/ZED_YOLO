@@ -553,7 +553,7 @@ def main(argv):
                     object_action_state = detection_zed.action_state  # Get the object action state
 
                 for objecttt in detections_zed.object_list:
-                    print("{} {}".format(objecttt.id, objecttt.height))
+                    print("{} {}".format(objecttt.id, objecttt.dimensions[1]))
 
                 '''
                 else:
