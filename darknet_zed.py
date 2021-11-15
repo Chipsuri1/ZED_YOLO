@@ -552,10 +552,12 @@ def main(argv):
                     object_tracking_state = detection_zed.tracking_state  # Get the object tracking state
                     object_action_state = detection_zed.action_state  # Get the object action state
 
+                '''
                 else:
                     object_height = 0
                     object_action_state = 0
                     object_velocity = 0
+                '''
 
                 object_velocity = math.sqrt(
                     object_velocity_x * object_velocity_x + object_velocity_y * object_velocity_y + object_velocity_z * object_velocity_z)
