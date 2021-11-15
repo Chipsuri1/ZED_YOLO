@@ -552,6 +552,9 @@ def main(argv):
                     object_tracking_state = detection_zed.tracking_state  # Get the object tracking state
                     object_action_state = detection_zed.action_state  # Get the object action state
 
+                for objecttt in detections_zed.object_list:
+                    print("{} {}".format(objecttt.id, objecttt.height))
+
                 '''
                 else:
                     object_height = 0
@@ -559,7 +562,7 @@ def main(argv):
                     object_velocity = 0
                 '''
 
-                print("height: " + str(object_height) + " | " + str(detection_zed) + " | " + str(object_action_state) + " | " + str(detections_zed.object_list))
+                #print("height: " + str(object_height) + " | " + str(detection_zed) + " | " + str(object_action_state) + " | " + str(detections_zed.object_list))
 
                 object_velocity = math.sqrt(
                     object_velocity_x * object_velocity_x + object_velocity_y * object_velocity_y + object_velocity_z * object_velocity_z)
