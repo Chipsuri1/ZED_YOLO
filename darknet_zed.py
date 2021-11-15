@@ -559,7 +559,7 @@ def main(argv):
                     object_velocity = 0
                 '''
 
-                print("height: " + str(object_height) + " | " + detection_zed + " | " + object_action_state + " | " + detections_zed.object_list)
+                print("height: " + str(object_height) + " | " + str(detection_zed) + " | " + str(object_action_state) + " | " + str(detections_zed.object_list))
 
                 object_velocity = math.sqrt(
                     object_velocity_x * object_velocity_x + object_velocity_y * object_velocity_y + object_velocity_z * object_velocity_z)
