@@ -309,6 +309,7 @@ def enable_object_detection(zed):
 
     return detection_parameters_rt
 
+
 '''
 def positional_tracking(zed, runtime_parameters):
     tracking_parameters = sl.PositionalTrackingParameters()
@@ -541,7 +542,9 @@ def main(argv):
                 distance = math.sqrt(x * x + y * y + z * z)
                 distance = "{:.2f}".format(distance)
 
-                detection_zed = detections_zed.object_list[i]
+                detection_zed = ''
+                if len(detections_zed.object_list) > 0:
+                    detection_zed = detections_zed.object_list[i]
                 # detection_zed = sl.ObjectData()
                 # detections_zed.get_object_data_from_id(detection_zed, i)  # Get the object with ID = i
 
@@ -567,7 +570,7 @@ def main(argv):
                     object_velocity = 0
                 '''
 
-                #print("height: " + str(object_height) + " | " + str(detection_zed) + " | " + str(object_action_state) + " | " + str(detections_zed.object_list))
+                # print("height: " + str(object_height) + " | " + str(detection_zed) + " | " + str(object_action_state) + " | " + str(detections_zed.object_list))
 
                 object_velocity = math.sqrt(
                     object_velocity_x * object_velocity_x + object_velocity_y * object_velocity_y + object_velocity_z * object_velocity_z)
