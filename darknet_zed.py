@@ -282,7 +282,7 @@ def enable_object_detection(zed):
 
     # allows objects to be tracked across frames and keep the same ID as long as possible.
     # Positional tracking must be active in order to track objects movements independently from camera motion.
-    #detection_parameters.enable_tracking = True
+    detection_parameters.enable_tracking = True
 
     # Set runtime parameters
     detection_parameters_rt = sl.ObjectDetectionRuntimeParameters()
@@ -297,7 +297,6 @@ def enable_object_detection(zed):
 
     # camera_infos = zed.get_camera_information()
 
-    '''
     if detection_parameters.enable_tracking:
         # Set positional tracking parameters
         positional_tracking_param = sl.PositionalTrackingParameters()
@@ -305,7 +304,6 @@ def enable_object_detection(zed):
         positional_tracking_param.set_floor_as_origin = True
         # Enable positional tracking
         zed.enable_positional_tracking(positional_tracking_param)
-    '''
 
     zed.enable_object_detection(detection_parameters)
 
