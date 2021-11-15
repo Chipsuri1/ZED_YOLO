@@ -32,17 +32,17 @@ logging.basicConfig(level=logging.INFO)
 
 def sample(probs):
     s = sum(probs)
-    probs = [a/s for a in probs]
+    probs = [a / s for a in probs]
     r = random.uniform(0, 1)
     for i in range(len(probs)):
         r = r - probs[i]
         if r <= 0:
             return i
-    return len(probs)-1
+    return len(probs) - 1
 
 
 def c_array(ctype, values):
-    arr = (ctype*len(values))()
+    arr = (ctype * len(values))()
     arr[:] = values
     return arr
 
@@ -81,8 +81,8 @@ class METADATA(Structure):
                 ("names", POINTER(c_char_p))]
 
 
-#lib = CDLL("/home/pjreddie/documents/darknet/libdarknet.so", RTLD_GLOBAL)
-#lib = CDLL("darknet.so", RTLD_GLOBAL)
+# lib = CDLL("/home/pjreddie/documents/darknet/libdarknet.so", RTLD_GLOBAL)
+# lib = CDLL("darknet.so", RTLD_GLOBAL)
 hasGPU = True
 if os.name == "nt":
     cwd = os.path.dirname(__file__)
@@ -98,7 +98,7 @@ if os.name == "nt":
             if tmp in ["1", "true", "yes", "on"]:
                 raise ValueError("ForceCPU")
             else:
-                log.info("Flag value '"+tmp+"' not forcing CPU mode")
+                log.info("Flag value '" + tmp + "' not forcing CPU mode")
         except KeyError:
             # We never set the flag
             if 'CUDA_VISIBLE_DEVICES' in envKeys:
@@ -125,7 +125,7 @@ if os.name == "nt":
             # compile but not renamed
             lib = CDLL(winNoGPUdll, RTLD_GLOBAL)
             log.warning("Environment variables indicated a CPU run, but we didn't find `" +
-                        winNoGPUdll+"`. Trying a GPU run anyway.")
+                        winNoGPUdll + "`. Trying a GPU run anyway.")
 else:
     lib = CDLL("/home/luca/darknet/libdarknet.so", RTLD_GLOBAL)
 lib.network_width.argtypes = [c_void_p]
@@ -266,42 +266,51 @@ netMain = None
 metaMain = None
 altNames = None
 
-def get_object(zed):
-    
-    objects = sl.Objects()
-    obj_runtime_param = sl.ObjectDetectionRuntimeParameters()
-    obj_runtime_param.detection_confidence_threshold = 25
 
-    if zed.grab() == sl.ERROR_CODE.SUCCESS :
-        zed.retrieve_objects(objects, obj_runtime_param)
-    
-    '''
-    if len(objects.object_list) > 0:
-        #print(len(objects.object_list))
-        return objects;
-    else:
-        return None;
-    '''
+def get_object(zed, detection_parameters_rt):
+    objects = sl.Objects()
+
+    # if zed.grab() == sl.ERROR_CODE.SUCCESS:
+    zed.retrieve_objects(objects, detection_parameters_rt)
+
     return objects
 
 
-def enableObjectDetection(zed):
-    obj_param = sl.ObjectDetectionParameters()
-    obj_param.enable_tracking=True
-    obj_param.image_sync=True
-    obj_param.enable_mask_output=True
+def enable_object_detection(zed):
+    # Set initialization parameters
+    detection_parameters = sl.ObjectDetectionParameters()
 
-    camera_infos = zed.get_camera_information()
-    if obj_param.enable_tracking :
+    # allows objects to be tracked across frames and keep the same ID as long as possible.
+    # Positional tracking must be active in order to track objects movements independently from camera motion.
+    detection_parameters.enable_tracking = True
+
+    # Set runtime parameters
+    detection_parameters_rt = sl.ObjectDetectionRuntimeParameters()
+    detection_parameters_rt.detection_confidence_threshold = 25
+
+    # run detection for every Camera grab
+    # determines if object detection runs for each frame or asynchronously in a separate thread.
+    detection_parameters.image_sync = True
+
+    # outputs 2D masks over detected objects. Since it requires additional processing, disable this option if not used.
+    # detection_parameters.enable_mask_output = True
+
+    # camera_infos = zed.get_camera_information()
+
+    if detection_parameters.enable_tracking:
+        # Set positional tracking parameters
         positional_tracking_param = sl.PositionalTrackingParameters()
-        #positional_tracking_param.set_as_static = True
+        # positional_tracking_param.set_as_static = True
         positional_tracking_param.set_floor_as_origin = True
+        # Enable positional tracking
         zed.enable_positional_tracking(positional_tracking_param)
 
-    zed.enable_object_detection(obj_param)
+    zed.enable_object_detection(detection_parameters)
+
+    return detection_parameters_rt
+
 
 def positional_tracking(zed, runtime_parameters):
-
     tracking_parameters = sl.PositionalTrackingParameters()
     err = zed.enable_positional_tracking(tracking_parameters)
 
@@ -315,7 +324,7 @@ def positional_tracking(zed, runtime_parameters):
         ty = round(zed_pose.get_translation(py_translation).get()[1], 3)
         tz = round(zed_pose.get_translation(py_translation).get()[2], 3)
         print("Translation: tx: {0}, ty:  {1}, tz:  {2}, timestamp: {3}\n".format(tx, ty, tz, zed_pose.timestamp))
-        #Display orientation quaternion
+        # Display orientation quaternion
         py_orientation = sl.Orientation()
         ox = round(zed_pose.get_orientation(py_orientation).get()[0], 3)
         oy = round(zed_pose.get_orientation(py_orientation).get()[1], 3)
@@ -385,9 +394,8 @@ def generate_color(meta_path):
 
 
 def main(argv):
-
     thresh = 0.25
-    darknet_path="./darknet/"
+    darknet_path = "./darknet/"
     config_path = darknet_path + "cfg/yolov4-tiny.cfg"
     weight_path = darknet_path + "yolov4-tiny.weights"
     meta_path = darknet_path + "cfg/coco.data"
@@ -426,25 +434,27 @@ def main(argv):
         # Launch camera by id
         input_type.set_from_camera_id(zed_id)
 
-    init = sl.InitParameters(input_t=input_type)
-    init.coordinate_units = sl.UNIT.METER
-    init.camera_resolution = sl.RESOLUTION.HD720
+    zed = sl.Camera()
 
-    cam = sl.Camera()
-    if not cam.is_opened():
+    # init_parameters = sl.InitParameters(input_t=input_type)
+    init_parameters = sl.InitParameters()
+    init_parameters.coordinate_units = sl.UNIT.METER
+    init_parameters.camera_resolution = sl.RESOLUTION.HD720
+
+    if not zed.is_opened():
         log.info("Opening ZED Camera...")
-    status = cam.open(init)
+    status = zed.open(init_parameters)
     if status != sl.ERROR_CODE.SUCCESS:
         log.error(repr(status))
         exit()
-    
 
-    runtime = sl.RuntimeParameters()
     # Use STANDARD sensing mode
-    runtime.sensing_mode = sl.SENSING_MODE.STANDARD
+    runtime_parameters = sl.RuntimeParameters()
+    runtime_parameters.sensing_mode = sl.SENSING_MODE.STANDARD
     mat = sl.Mat()
     point_cloud_mat = sl.Mat()
-    enableObjectDetection(cam)
+
+    detection_parameters_rt = enable_object_detection(zed)
 
     # Import the global variables. This lets us instance Darknet once,
     # then just call performDetect() again without instancing again
@@ -452,13 +462,13 @@ def main(argv):
     assert 0 < thresh < 1, "Threshold should be a float between zero and one (non-inclusive)"
     if not os.path.exists(config_path):
         raise ValueError("Invalid config path `" +
-                         os.path.abspath(config_path)+"`")
+                         os.path.abspath(config_path) + "`")
     if not os.path.exists(weight_path):
         raise ValueError("Invalid weight path `" +
-                         os.path.abspath(weight_path)+"`")
+                         os.path.abspath(weight_path) + "`")
     if not os.path.exists(meta_path):
         raise ValueError("Invalid data file path `" +
-                         os.path.abspath(meta_path)+"`")
+                         os.path.abspath(meta_path) + "`")
     if netMain is None:
         netMain = load_net_custom(config_path.encode(
             "ascii"), weight_path.encode("ascii"), 0, 1)  # batch size = 1
@@ -493,91 +503,93 @@ def main(argv):
 
     key = ''
     while key != 113:  # for 'q' key
-        start_time = time.time() # start time of the loop
-        err = cam.grab(runtime)
+        start_time = time.time()  # start time of the loop
+        err = zed.grab(runtime_parameters)
         if err == sl.ERROR_CODE.SUCCESS:
-            cam.retrieve_image(mat, sl.VIEW.LEFT)
+            zed.retrieve_image(mat, sl.VIEW.LEFT)
             image = mat.get_data()
 
-            cam.retrieve_measure(
+            zed.retrieve_measure(
                 point_cloud_mat, sl.MEASURE.XYZRGBA)
             depth = point_cloud_mat.get_data()
-            #positional_tracking(cam, runtime)            
+            # positional_tracking(cam, runtime)
 
             # Do the detection
-            detections = detect(netMain, metaMain, image, thresh)
+            detections_yolo = detect(netMain, metaMain, image, thresh)
+            detections_zed = get_object(zed, detection_parameters_rt)
 
-            objects = get_object(cam)
-
-            #log.info(chr(27) + "[2J"+"**** " + str(len(detections)) + " Results ****")
-            #for detection in detections:
-            for i in range(len(detections)):
-                detection = detections[i]
-                label = detection[0]
-                confidence = detection[1]
-                pstring = label+": "+str(np.rint(100 * confidence))+"%"
-                #log.info(pstring)
-                bounds = detection[2]
+            # log.info(chr(27) + "[2J"+"**** " + str(len(detections)) + " Results ****")
+            # for detection in detections:
+            for i in range(len(detections_yolo)):
+                detection_yolo = detections_yolo[i]
+                label = detection_yolo[0]
+                confidence = detection_yolo[1]
+                pstring = label + ": " + str(np.rint(100 * confidence)) + "%"
+                # log.info(pstring)
+                bounds = detection_yolo[2]
                 y_extent = int(bounds[3])
                 x_extent = int(bounds[2])
                 # Coordinates are around the center
-                x_coord = int(bounds[0] - bounds[2]/2)
-                y_coord = int(bounds[1] - bounds[3]/2)
-                #boundingBox = [[x_coord, y_coord], [x_coord, y_coord + y_extent], [x_coord + x_extent, y_coord + y_extent], [x_coord + x_extent, y_coord]]
+                x_coord = int(bounds[0] - bounds[2] / 2)
+                y_coord = int(bounds[1] - bounds[3] / 2)
+                # boundingBox = [[x_coord, y_coord], [x_coord, y_coord + y_extent], [x_coord + x_extent, y_coord + y_extent], [x_coord + x_extent, y_coord]]
                 thickness = 1
                 x, y, z = get_object_depth(depth, bounds)
                 distance = math.sqrt(x * x + y * y + z * z)
                 distance = "{:.2f}".format(distance)
-                #object_height = 0
-                #object_action_state = 0
+                # object_height = 0
+                # object_action_state = 0
 
-                #objectt = get_object(cam, i)
-                objectt = sl.ObjectData()
-                objects.get_object_data_from_id(objectt, i); # Get the object with ID = O
+                # objectt = get_object(cam, i)
+                detection_zed = sl.ObjectData()
+                detections_zed.get_object_data_from_id(detection_zed, i)  # Get the object with ID = O
 
+                if detection_zed:
+                    object_id = detection_zed.id  # Get the object id
+                    object_label = detection_zed.label  # Get the object label
+                    object_height = detection_zed.dimensions[1]  # Get the object dimensions
+                    object_position_x, object_position_y, object_position_z = detection_zed.position  # Get the object position
+                    object_velocity_x, object_velocity_y, object_velocity_z = detection_zed.velocity  # Get the object velocity
+                    object_tracking_state = detection_zed.tracking_state  # Get the object tracking state
+                    object_action_state = detection_zed.action_state  # Get the object action state
 
-                if objectt:
-                    object_id = objectt.id # Get the object id
-                    object_label = objectt.label # Get the object label
-                    object_height = objectt.dimensions[1] # Get the object dimensions
-                    object_positionX, object_positionY, object_positionZ = objectt.position # Get the object position
-                    object_velocityX, object_velocityY, object_velocityZ = objectt.velocity # Get the object velocity
-                    object_tracking_state = objectt.tracking_state # Get the object tracking state
-                    object_action_state = objectt.action_state # Get the object action state 
-                
                 else:
                     object_height = 0
                     object_action_state = 0
                     object_velocity = 0
-                 
-                object_velocity = math.sqrt(object_velocityX * object_velocityX + object_velocityY * object_velocityY + object_velocityZ * object_velocityZ)
+
+                object_velocity = math.sqrt(
+                    object_velocity_x * object_velocity_x + object_velocity_y * object_velocity_y + object_velocity_z * object_velocity_z)
 
                 cv2.rectangle(image, (x_coord - thickness, y_coord - thickness),
-                              (x_coord + x_extent + thickness, y_coord + (-120 + thickness*2)),
-                              color_array[detection[3]], -1)
-                cv2.putText(image, label + " | distance: " +  (str(distance) + " m ") + " | height: " + str(round(object_height,2)) + " m",
-                              (x_coord + (thickness * 4), y_coord + (-100 + thickness * 4)),
-                              cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-                cv2.putText(image,"status: " + str(object_action_state) + " | velocity: " + str(round(object_velocity,2)) + " m/s",
-                              (x_coord + (thickness * 4), y_coord + (-60 + thickness * 4)),
-                              cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-                cv2.putText(image,"positionXYZ: " + str(round(object_positionX,2)) + " " + str(round(object_positionY,2)) + " " + str(round(object_positionZ,2)),
-                              (x_coord + (thickness * 4), y_coord + (-20 + thickness * 4)),
-                              cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                              (x_coord + x_extent + thickness, y_coord + (-120 + thickness * 2)),
+                              color_array[detection_yolo[3]], -1)
+                cv2.putText(image, label + " | distance: " + (str(distance) + " m ") + " | height: " + str(
+                    round(object_height, 2)) + " m",
+                            (x_coord + (thickness * 4), y_coord + (-100 + thickness * 4)),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                cv2.putText(image, "status: " + str(object_action_state) + " | velocity: " + str(
+                    round(object_velocity, 2)) + " m/s",
+                            (x_coord + (thickness * 4), y_coord + (-60 + thickness * 4)),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                cv2.putText(image, "positionXYZ: " + str(round(object_position_x, 2)) + " " + str(
+                    round(object_position_y, 2)) + " " + str(round(object_position_z, 2)),
+                            (x_coord + (thickness * 4), y_coord + (-20 + thickness * 4)),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
                 cv2.rectangle(image, (x_coord - thickness, y_coord - thickness),
                               (x_coord + x_extent + thickness, y_coord + y_extent + thickness),
-                              color_array[detection[3]], int(thickness*2))
+                              color_array[detection_yolo[3]], int(thickness * 2))
 
             cv2.imshow("ZED", image)
             key = cv2.waitKey(5)
-            if objects:
-                log.info("ZED: " + str(len(objects.object_list)) + " YOLO:" + str(len(detections)))
+            if detections_zed:
+                log.info("ZED: " + str(len(detections_zed.object_list)) + " YOLO:" + str(len(detections_yolo)))
             log.info("FPS: {}".format(1.0 / (time.time() - start_time)))
         else:
             key = cv2.waitKey(5)
     cv2.destroyAllWindows()
 
-    cam.close()
+    zed.close()
     log.info("\nFINISH")
 
 
