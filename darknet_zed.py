@@ -545,8 +545,8 @@ def main(argv):
                 print("lenObjectList: " + str(len(detections_zed.object_list)))
                 print("lenDetZED: " + str(len(detections_zed)))
 
-                if len(detections_yolo) > 0:
-                    detection_zed = detections_zed.object_list[i]
+                if len(detections_zed.object_list) > 0:
+                    detection_zed = detections_zed.object_list[0]
                 # detection_zed = sl.ObjectData()
                 # detections_zed.get_object_data_from_id(detection_zed, i)  # Get the object with ID = i
 
