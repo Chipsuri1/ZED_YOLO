@@ -545,10 +545,8 @@ def main(argv):
 
                 if len(detections_zed.object_list) >= len(detections_yolo):
                     detection_zed = detections_zed.object_list[i]
-                # detection_zed = sl.ObjectData()
-                # detections_zed.get_object_data_from_id(detection_zed, i)  # Get the object with ID = i
-
-                if detection_zed:
+                    # detection_zed = sl.ObjectData()
+                    # detections_zed.get_object_data_from_id(detection_zed, i)  # Get the object with ID = i
                     object_id = detection_zed.id  # Get the object id
                     object_label = detection_zed.label  # Get the object label
                     object_height = detection_zed.dimensions[1]  # Get the object dimensions
