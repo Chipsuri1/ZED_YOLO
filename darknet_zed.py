@@ -542,10 +542,10 @@ def main(argv):
                 distance = math.sqrt(x * x + y * y + z * z)
                 distance = "{:.2f}".format(distance)
 
-                print("lenObjectList: " + str(len(detections_zed.object_list)))
+                print("lenZED: " + str(len(detections_zed.object_list)))
                 print("lenYolo: " + str(len(detections_yolo)))
 
-                if len(detections_zed.object_list) > 0:
+                if len(detections_zed.object_list) >= len(detections_yolo):
                     detection_zed = detections_zed.object_list[i]
                 # detection_zed = sl.ObjectData()
                 # detections_zed.get_object_data_from_id(detection_zed, i)  # Get the object with ID = i
@@ -563,8 +563,7 @@ def main(argv):
                     print("len: " + str(len(detections_zed.object_list)))
                     print("{} {}".format(objecttt.id, objecttt.dimensions[1]))
 
-                print("DetZed: " + str(detection_zed.dimensions[1]))
-                # d
+                # print("DetZed: " + str(detection_zed.dimensions[1]))
                 '''
                 else:
                     object_height = 0
