@@ -561,7 +561,7 @@ def main(argv):
                     print("{} {}".format(objecttt.id, objecttt.dimensions[1]))
 
                 print("DetZed: " + str(detection_zed.dimensions[1]))
-
+                # d
                 '''
                 else:
                     object_height = 0
