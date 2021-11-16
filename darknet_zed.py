@@ -543,7 +543,7 @@ def main(argv):
                 distance = "{:.2f}".format(distance)
 
                 print("lenObjectList: " + str(len(detections_zed.object_list)))
-                print("lenYolo: " + len(detections_yolo))
+                print("lenYolo: " + str(len(detections_yolo)))
 
                 if len(detections_zed.object_list) > 0:
                     detection_zed = detections_zed.object_list[i]
