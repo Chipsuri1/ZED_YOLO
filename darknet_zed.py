@@ -542,6 +542,9 @@ def main(argv):
                 distance = math.sqrt(x * x + y * y + z * z)
                 distance = "{:.2f}".format(distance)
 
+                print("lenObjectList: " + str(len(detections_zed.object_list)))
+                print("lenDetZED: " + str(len(detections_zed)))
+
                 if len(detections_yolo) > 0:
                     detection_zed = detections_zed.object_list[i]
                 # detection_zed = sl.ObjectData()
