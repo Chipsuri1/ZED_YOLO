@@ -543,9 +543,10 @@ def main(argv):
                 distance = "{:.2f}".format(distance)
 
                 print("lenObjectList: " + str(len(detections_zed.object_list)))
+                print("lenYolo: " + len(detections_yolo))
 
                 if len(detections_zed.object_list) > 0:
-                    detection_zed = detections_zed.object_list[0]
+                    detection_zed = detections_zed.object_list[i]
                 # detection_zed = sl.ObjectData()
                 # detections_zed.get_object_data_from_id(detection_zed, i)  # Get the object with ID = i
 
