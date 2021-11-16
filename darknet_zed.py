@@ -127,7 +127,7 @@ if os.name == "nt":
             log.warning("Environment variables indicated a CPU run, but we didn't find `" +
                         winNoGPUdll + "`. Trying a GPU run anyway.")
 else:
-    lib = CDLL("/home/luca/darknet/libdarknet.so", RTLD_GLOBAL)
+    lib = CDLL("./darknet/libdarknet.so", RTLD_GLOBAL)
 lib.network_width.argtypes = [c_void_p]
 lib.network_width.restype = c_int
 lib.network_height.argtypes = [c_void_p]
@@ -523,7 +523,6 @@ def main(argv):
             detections_zed = get_object(zed, detection_parameters_rt)
 
             # log.info(chr(27) + "[2J"+"**** " + str(len(detections)) + " Results ****")
-            # for detection in detections:
             for i in range(len(detections_yolo)):
                 detection_yolo = detections_yolo[i]
                 label = detection_yolo[0]
@@ -536,7 +535,6 @@ def main(argv):
                 # Coordinates are around the center
                 x_coord = int(bounds[0] - bounds[2] / 2)
                 y_coord = int(bounds[1] - bounds[3] / 2)
-                # boundingBox = [[x_coord, y_coord], [x_coord, y_coord + y_extent], [x_coord + x_extent, y_coord + y_extent], [x_coord + x_extent, y_coord]]
                 thickness = 1
                 x, y, z = get_object_depth(depth, bounds)
                 distance = math.sqrt(x * x + y * y + z * z)
@@ -558,20 +556,6 @@ def main(argv):
                     object_velocity_x, object_velocity_y, object_velocity_z = detection_zed.velocity  # Get the object velocity
                     object_tracking_state = detection_zed.tracking_state  # Get the object tracking state
                     object_action_state = detection_zed.action_state  # Get the object action state
-
-                for objecttt in detections_zed.object_list:
-                    print("len: " + str(len(detections_zed.object_list)))
-                    print("{} {}".format(objecttt.id, objecttt.dimensions[1]))
-
-                # print("DetZed: " + str(detection_zed.dimensions[1]))
-                '''
-                else:
-                    object_height = 0
-                    object_action_state = 0
-                    object_velocity = 0
-                '''
-
-                # print("height: " + str(object_height) + " | " + str(detection_zed) + " | " + str(object_action_state) + " | " + str(detections_zed.object_list))
 
                 object_velocity = math.sqrt(
                     object_velocity_x * object_velocity_x + object_velocity_y * object_velocity_y + object_velocity_z * object_velocity_z)
