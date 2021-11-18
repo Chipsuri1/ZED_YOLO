@@ -560,7 +560,12 @@ def main(argv):
                         object_velocity_x * object_velocity_x + object_velocity_y * object_velocity_y + object_velocity_z * object_velocity_z)
 
                 else:
-                    object_height, object_position_x, object_position_y, object_position_z, object_action_state, object_velocity = 0
+                    object_height = 0
+                    object_position_x = 0
+                    object_position_y = 0
+                    object_position_z = 0
+                    object_action_state = 0
+                    object_velocity = 0
 
                 cv2.rectangle(image, (x_coord - thickness, y_coord - thickness),
                               (x_coord + x_extent + thickness, y_coord + (-120 + thickness * 2)),
