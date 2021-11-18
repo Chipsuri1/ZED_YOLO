@@ -559,7 +559,7 @@ def main(argv):
                     object_velocity = math.sqrt(
                         object_velocity_x * object_velocity_x + object_velocity_y * object_velocity_y + object_velocity_z * object_velocity_z)
 
-                    print("ObjectID: " + object_id)
+                    print("ObjectID: " + str(object_id))
 
                 else:
                     object_height = 0
