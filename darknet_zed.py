@@ -540,8 +540,8 @@ def main(argv):
                 distance = math.sqrt(x * x + y * y + z * z)
                 distance = "{:.2f}".format(distance)
 
-                print("lenZED: " + str(len(detections_zed.object_list)))
-                print("lenYolo: " + str(len(detections_yolo)))
+                #print("lenZED: " + str(len(detections_zed.object_list)))
+                #print("lenYolo: " + str(len(detections_yolo)))
 
                 if len(detections_zed.object_list) >= len(detections_yolo):
                     detection_zed = detections_zed.object_list[i]
@@ -558,6 +558,8 @@ def main(argv):
 
                     object_velocity = math.sqrt(
                         object_velocity_x * object_velocity_x + object_velocity_y * object_velocity_y + object_velocity_z * object_velocity_z)
+
+                    print("ObjectID: " + object_id)
 
                 else:
                     object_height = 0
