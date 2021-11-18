@@ -548,7 +548,6 @@ def main(argv):
                     # detection_zed = sl.ObjectData()
                     # detections_zed.get_object_data_from_id(detection_zed, i)  # Get the object with ID = i
 
-                if detection_zed:
                     object_id = detection_zed.id  # Get the object id
                     object_label = detection_zed.label  # Get the object label
                     object_height = detection_zed.dimensions[1]  # Get the object dimensions
@@ -557,8 +556,11 @@ def main(argv):
                     object_tracking_state = detection_zed.tracking_state  # Get the object tracking state
                     object_action_state = detection_zed.action_state  # Get the object action state
 
-                object_velocity = math.sqrt(
-                    object_velocity_x * object_velocity_x + object_velocity_y * object_velocity_y + object_velocity_z * object_velocity_z)
+                    object_velocity = math.sqrt(
+                        object_velocity_x * object_velocity_x + object_velocity_y * object_velocity_y + object_velocity_z * object_velocity_z)
+
+                else:
+                    object_height, object_position_x, object_position_y, object_position_z, object_action_state, object_velocity = 0
 
                 cv2.rectangle(image, (x_coord - thickness, y_coord - thickness),
                               (x_coord + x_extent + thickness, y_coord + (-120 + thickness * 2)),
