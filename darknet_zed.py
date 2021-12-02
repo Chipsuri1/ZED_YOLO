@@ -1,14 +1,14 @@
 #! /usr/bin/env python3.6
 """
-Python 3 wrapper for identifying objects in images
+Python 3 wrapper for identifying persons with ZED2 Camera using YoloV4
 
 Requires DLL compilation
 
-Original *nix 2.7: https://github.com/pjreddie/darknet/blob/0f110834f4e18b30d5f101bf8f1724c34b7b83db/python/darknet.py
-Windows Python 2.7 version: https://github.com/AlexeyAB/darknet/blob/fc496d52bf22a0bb257300d3c79be9cd80e722cb/build/darknet/x64/darknet.py
+This file extends the existing file from: https://github.com/stereolabs/zed-yolo/blob/master/zed_python_sample/darknet_zed.py
+Author: Philip Kahn, Aymeric Dujardin
 
-@author: Philip Kahn, Aymeric Dujardin
-@date: 20180911
+@author: Luca Thomaier
+@date: 20211202
 """
 # pylint: disable=R, W0401, W0614, W0703
 import os
@@ -310,31 +310,6 @@ def enable_object_detection(zed):
     return detection_parameters_rt
 
 
-'''
-def positional_tracking(zed, runtime_parameters):
-    tracking_parameters = sl.PositionalTrackingParameters()
-    err = zed.enable_positional_tracking(tracking_parameters)
-
-    zed_pose = sl.Pose()
-    if zed.grab(runtime_parameters) == sl.ERROR_CODE.SUCCESS:
-        # Get the pose of the camera relative to the world frame
-        state = zed.get_position(zed_pose, sl.REFERENCE_FRAME.FRAME_WORLD)
-        # Display translation and timestamp
-        py_translation = sl.Translation()
-        tx = round(zed_pose.get_translation(py_translation).get()[0], 3)
-        ty = round(zed_pose.get_translation(py_translation).get()[1], 3)
-        tz = round(zed_pose.get_translation(py_translation).get()[2], 3)
-        print("Translation: tx: {0}, ty:  {1}, tz:  {2}, timestamp: {3}\n".format(tx, ty, tz, zed_pose.timestamp))
-        # Display orientation quaternion
-        py_orientation = sl.Orientation()
-        ox = round(zed_pose.get_orientation(py_orientation).get()[0], 3)
-        oy = round(zed_pose.get_orientation(py_orientation).get()[1], 3)
-        oz = round(zed_pose.get_orientation(py_orientation).get()[2], 3)
-        ow = round(zed_pose.get_orientation(py_orientation).get()[3], 3)
-        print("Orientation: ox: {0}, oy:  {1}, oz: {2}, ow: {3}\n".format(ox, oy, oz, ow))
-'''
-
-
 def get_object_depth(depth, bounds):
     '''
     Calculates the median x, y, z position of top slice(area_div) of point cloud
@@ -540,8 +515,8 @@ def main(argv):
                 distance = math.sqrt(x * x + y * y + z * z)
                 distance = "{:.2f}".format(distance)
 
-                #print("lenZED: " + str(len(detections_zed.object_list)))
-                #print("lenYolo: " + str(len(detections_yolo)))
+                # print("lenZED: " + str(len(detections_zed.object_list)))
+                # print("lenYolo: " + str(len(detections_yolo)))
 
                 if len(detections_zed.object_list) >= len(detections_yolo):
                     detection_zed = detections_zed.object_list[i]
