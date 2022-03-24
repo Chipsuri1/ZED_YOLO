@@ -561,7 +561,7 @@ def main(argv):
                 cv2.rectangle(image, (x_coord - thickness, y_coord - thickness),
                               (x_coord + x_extent + thickness, y_coord + y_extent + thickness),
                               color_array[detection_yolo[3]], int(thickness * 2))
-                log.info("object" + i + " | " + label + " | distance: " + (str(distance) + " m ") + " | height: " + str(
+                log.info("object" + str(i) + " | " + label + " | distance: " + (str(distance) + " m ") + " | height: " + str(
                     round(object_height, 2)) + " m | status: " + str(object_action_state) + " | velocity: " + str(
                     round(object_velocity, 2)) + " m/s | positionXYZ: " + str(round(object_position_x, 2)) + " " + str(
                     round(object_position_y, 2)) + " " + str(round(object_position_z, 2)))
