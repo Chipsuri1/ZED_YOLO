@@ -492,7 +492,7 @@ def main(argv):
 
     # out = cv2.VideoWriter('./processed.avi', -1, 30, (1280, 720))
     # out = cv2.VideoWriter('./processed.avi', codec, 30, (1280, 720))
-    out = cv2.VideoWriter('./processed.avi', codec, 30, (720, 1080))
+    out = cv2.VideoWriter('./processed.avi', codec, 30, (720, 1280))
 
     key = ''
     while key != 113:  # for 'q' key
