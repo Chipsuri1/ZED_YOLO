@@ -495,8 +495,8 @@ def main(argv):
     err = zed.enable_recording(recording_param)
 
     # out = cv2.VideoWriter('./processed.avi', -1, 30, (1280, 720))
-    out = cv2.VideoWriter('./processed.avi', codec, 5, (1280, 720))
-    # out = cv2.VideoWriter('./processed.avi', 4, 30, (720, 1280))
+    # out = cv2.VideoWriter('./processed.avi', codec, 5, (1280, 720))
+    out = cv2.VideoWriter('./processed.avi', codec, 5, (720, 1280))
 
     key = ''
     count = 0
@@ -577,10 +577,8 @@ def main(argv):
 
             log.info(str(image.shape[0]) + " " + str(image.shape[1]))
             cv2.imshow("ZED", image)
-            cv2.imwrite("frame%d.jpg" % count, image)
-            # zed.grab()
+            # cv2.imwrite("frame%d.jpg" % count, image)
             cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-            # cv2.flip(image, 0)
             out.write(image)
             count += 1
             key = cv2.waitKey(5)
@@ -590,8 +588,8 @@ def main(argv):
         else:
             key = cv2.waitKey(5)
 
-    # out.release()
-    zed.disable_recording()
+    out.release()
+    # zed.disable_recording()
     cv2.destroyAllWindows()
 
     zed.close()
