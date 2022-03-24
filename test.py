@@ -33,8 +33,8 @@ while True:
         zed.retrieve_image(mat, sl.VIEW.LEFT)
         image = mat.get_data()
 
-    cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-    image = cv2.resize(image, (720, 1280))
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    # image = cv2.resize(image, (720, 1280))
     writer.write(image)
 
     cv2.imshow('frame', image)
