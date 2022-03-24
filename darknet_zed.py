@@ -25,13 +25,6 @@ import numpy as np
 import cv2
 import pyzed.sl as sl
 
-filename = "information.log"
-
-should_roll_over = os.path.isfile(filename)
-handler = logging.handlers.RotatingFileHandler(filename, mode='w', backupCount=5)
-if should_roll_over:  # log already exists, roll over!
-    handler.doRollover()
-
 # Get the top-level logger object
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
