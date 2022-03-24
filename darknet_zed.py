@@ -25,6 +25,13 @@ import numpy as np
 import cv2
 import pyzed.sl as sl
 
+filename = "information.log"
+
+should_roll_over = os.path.isfile(filename)
+handler = logging.handlers.RotatingFileHandler(filename, mode='w', backupCount=5)
+if should_roll_over:  # log already exists, roll over!
+    handler.doRollover()
+
 # Get the top-level logger object
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -89,9 +96,6 @@ class METADATA(Structure):
     _fields_ = [("classes", c_int),
                 ("names", POINTER(c_char_p))]
 
-
-# lib = CDLL("/home/pjreddie/documents/darknet/libdarknet.so", RTLD_GLOBAL)
-# lib = CDLL("darknet.so", RTLD_GLOBAL)
 hasGPU = True
 if os.name == "nt":
     cwd = os.path.dirname(__file__)
@@ -279,7 +283,6 @@ altNames = None
 def get_object(zed, detection_parameters_rt):
     objects = sl.Objects()
 
-    # if zed.grab() == sl.ERROR_CODE.SUCCESS:
     zed.retrieve_objects(objects, detection_parameters_rt)
 
     return objects
@@ -492,7 +495,6 @@ def main(argv):
     out = cv2.VideoWriter('./basicvideo.avi', codec, 4, (1280, 720))
 
     key = ''
-    count = 0
     while key != 113:  # for 'q' key
         start_time = time.time()  # start time of the loop
         # err = zed.grab(runtime_parameters)
@@ -566,14 +568,18 @@ def main(argv):
                 cv2.rectangle(image, (x_coord - thickness, y_coord - thickness),
                               (x_coord + x_extent + thickness, y_coord + y_extent + thickness),
                               color_array[detection_yolo[3]], int(thickness * 2))
+                log.info("object" + i + " | " + label + " | distance: " + (str(distance) + " m ") + " | height: " + str(
+                    round(object_height, 2)) + " m | status: " + str(object_action_state) + " | velocity: " + str(
+                    round(object_velocity, 2)) + " m/s | positionXYZ: " + str(round(object_position_x, 2)) + " " + str(
+                    round(object_position_y, 2)) + " " + str(round(object_position_z, 2)))
 
             cv2.imshow("ZED", image)
-            log.info(str(image.shape[0]) + " " + str(image.shape[1]))
+
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             image = cv2.resize(image, (1280, 720))
             out.write(image)
-            count += 1
+
             key = cv2.waitKey(5)
             if detections_zed:
                 log.info("ZED: " + str(len(detections_zed.object_list)) + " YOLO:" + str(len(detections_yolo)))
