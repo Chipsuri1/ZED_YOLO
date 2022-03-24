@@ -490,7 +490,8 @@ def main(argv):
 
     codec = cv2.VideoWriter_fourcc(*"MJPG")
 
-    out = cv2.VideoWriter('./processed.avi', codec, 10, (1280, 720))
+    out = cv2.VideoWriter('./processed.avi', -1, 30, (1280, 720))
+    # out = cv2.VideoWriter('./processed.avi', codec, 30, (1280, 720))
 
     key = ''
     while key != 113:  # for 'q' key
