@@ -495,7 +495,6 @@ def main(argv):
             # get image from camera for yolo detection
             zed.retrieve_image(mat, sl.VIEW.LEFT)
             image = mat.get_data()
-            log.info(str(image.shape[0]) + " " + str(image.shape[1]))
 
             # get depth information of camera
             zed.retrieve_measure(point_cloud_mat, sl.MEASURE.XYZRGBA)
@@ -575,7 +574,7 @@ def main(argv):
 
             key = cv2.waitKey(5)
             if detections_zed:
-                log.info("ZED: " + str(len(detections_zed.object_list)) + " YOLO:" + str(len(detections_yolo)))
+                print("ZED: " + str(len(detections_zed.object_list)) + " YOLO:" + str(len(detections_yolo)))
             log.info("FPS: {}".format(1.0 / (time.time() - start_time)))
         else:
             key = cv2.waitKey(5)
