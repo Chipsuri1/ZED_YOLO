@@ -568,8 +568,9 @@ def main(argv):
                               (x_coord + x_extent + thickness, y_coord + y_extent + thickness),
                               color_array[detection_yolo[3]], int(thickness * 2))
 
-            out.write(image)
             cv2.imshow("ZED", image)
+            cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+            out.write(image)
             key = cv2.waitKey(5)
             if detections_zed:
                 log.info("ZED: " + str(len(detections_zed.object_list)) + " YOLO:" + str(len(detections_yolo)))
