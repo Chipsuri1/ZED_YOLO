@@ -487,11 +487,12 @@ def main(argv):
     color_array = generate_color(meta_path)
 
     log.info("Running...")
-    cap = cv2.VideoCapture(1)
+    # cap = cv2.VideoCapture(1)
     codec = cv2.VideoWriter_fourcc('M','P','E','G')
 
     # out = cv2.VideoWriter('./processed.avi', -1, 30, (1280, 720))
-    out = cv2.VideoWriter('./processed.avi', codec, 30, (1280, 720))
+    # out = cv2.VideoWriter('./processed.avi', codec, 30, (1280, 720))
+    out = cv2.VideoWriter('./processed.avi', codec, 30, (720, 1080))
 
     key = ''
     while key != 113:  # for 'q' key
