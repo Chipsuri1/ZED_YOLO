@@ -497,7 +497,7 @@ def main(argv):
     # frame_height = int(cap.get(4))
 
     # Define the codec and create VideoWriter object.The output is stored in 'outpy.avi' file.
-    out = cv2.VideoWriter('outpy.avi', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10, (frame_width, frame_height))
+    out = cv2.VideoWriter('outpy.avi', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10, ("480", "620"))
 
     key = ''
     while key != 113:  # for 'q' key
