@@ -489,12 +489,12 @@ def main(argv):
 
     log.info("Running...")
     # Create a VideoCapture object
-    cap = cv2.VideoCapture(0)
-
-    # Default resolutions of the frame are obtained.The default resolutions are system dependent.
-    # We convert the resolutions from float to integer.
-    frame_width = int(cap.get(3))
-    frame_height = int(cap.get(4))
+    # cap = cv2.VideoCapture(0)
+    #
+    # # Default resolutions of the frame are obtained.The default resolutions are system dependent.
+    # # We convert the resolutions from float to integer.
+    # frame_width = int(cap.get(3))
+    # frame_height = int(cap.get(4))
 
     # Define the codec and create VideoWriter object.The output is stored in 'outpy.avi' file.
     out = cv2.VideoWriter('outpy.avi', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10, (frame_width, frame_height))
@@ -507,13 +507,13 @@ def main(argv):
             # get image from camera for yolo detection
             zed.retrieve_image(mat, sl.VIEW.LEFT)
             image = mat.get_data()
-            ret, frame = cap.read()
+            # ret, frame = cap.read()
 
             # Write the frame into the file 'output.avi'
-            if ret == True:
+            # if ret == True:
 
                 # Write the frame into the file 'output.avi'
-                out.write(image)
+            out.write(image)
 
             # get depth information of camera
             zed.retrieve_measure(point_cloud_mat, sl.MEASURE.XYZRGBA)
