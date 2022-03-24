@@ -17,7 +17,7 @@ if err != sl.ERROR_CODE.SUCCESS:
 codec = cv2.VideoWriter_fourcc('M','P','E','G')
 
 # out = cv2.VideoWriter('./processed.avi', codec, 20.0, (720,1280))
-writer= cv2.VideoWriter('./basicvideo.avi', codec, 20, (1280,720))
+writer= cv2.VideoWriter('./basicvideo.avi', codec, 4, (1280,720))
 # writer= cv2.VideoWriter('./basicvideo.avi', codec, 20, (720,1280))
 # Create an RGBA sl.Mat object
 image_zed = sl.Mat(zed.get_camera_information().camera_resolution.width, zed.get_camera_information().camera_resolution.height, sl.MAT_TYPE.U8_C4)
