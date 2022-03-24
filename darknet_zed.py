@@ -39,17 +39,6 @@ consoleHandler = logging.StreamHandler()
 consoleHandler.setFormatter(logFormatter)
 log.addHandler(consoleHandler)
 
-# Create a VideoCapture object
-cap = cv2.VideoCapture(0)
-
-# Default resolutions of the frame are obtained.The default resolutions are system dependent.
-# We convert the resolutions from float to integer.
-frame_width = int(cap.get(3))
-frame_height = int(cap.get(4))
-
-# Define the codec and create VideoWriter object.The output is stored in 'outpy.avi' file.
-out = cv2.VideoWriter('outpy.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (frame_width,frame_height))
-
 def sample(probs):
     s = sum(probs)
     probs = [a / s for a in probs]
@@ -499,8 +488,16 @@ def main(argv):
     color_array = generate_color(meta_path)
 
     log.info("Running...")
-    # cap = cv2.VideoCapture(0)
-    # out = cv2.VideoWriter(filename, get_video_type(filename), 25, get_dims(cap, res))
+    # Create a VideoCapture object
+    cap = cv2.VideoCapture(0)
+
+    # Default resolutions of the frame are obtained.The default resolutions are system dependent.
+    # We convert the resolutions from float to integer.
+    frame_width = int(cap.get(3))
+    frame_height = int(cap.get(4))
+
+    # Define the codec and create VideoWriter object.The output is stored in 'outpy.avi' file.
+    out = cv2.VideoWriter('outpy.avi', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10, (frame_width, frame_height))
 
     key = ''
     while key != 113:  # for 'q' key
