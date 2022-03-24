@@ -499,6 +499,7 @@ def main(argv):
     # out = cv2.VideoWriter('./processed.avi', codec, 30, (720, 1280))
 
     key = ''
+    count = 0
     while key != 113:  # for 'q' key
         start_time = time.time()  # start time of the loop
         # err = zed.grab(runtime_parameters)
@@ -576,10 +577,12 @@ def main(argv):
 
             log.info(str(image.shape[0]) + " " + str(image.shape[1]))
             cv2.imshow("ZED", image)
-            zed.grab()
+            cv2.imwrite("frame%d.jpg" % count, image)
+            # zed.grab()
             # cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
             # cv2.flip(image, 0)
             # out.write(image)
+            count += 1
             key = cv2.waitKey(5)
             if detections_zed:
                 log.info("ZED: " + str(len(detections_zed.object_list)) + " YOLO:" + str(len(detections_yolo)))
