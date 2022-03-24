@@ -568,7 +568,7 @@ def main(argv):
                               (x_coord + x_extent + thickness, y_coord + y_extent + thickness),
                               color_array[detection_yolo[3]], int(thickness * 2))
 
-            log.info(image.shape[0] + " " + image.shape[1])
+            log.info(str(image.shape[0]) + " " + str(image.shape[1]))
             cv2.imshow("ZED", image)
             cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
             out.write(image)
