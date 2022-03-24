@@ -26,11 +26,11 @@ import cv2
 import pyzed.sl as sl
 
 # Get the top-level logger object
-#log = logging.getLogger(__name__)
-#logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
-log = logging.getLogger()
+# log = logging.getLogger()
 
 fileHandler = logging.FileHandler("{0}/{1}.log".format("", "info.log"))
 fileHandler.setFormatter(logFormatter)
