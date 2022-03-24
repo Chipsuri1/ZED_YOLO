@@ -2,11 +2,11 @@ import cv2
 
 cap= cv2.VideoCapture(0)
 
-def make_720p():
-    cap.set(3, 1280)
-    cap.set(4, 720)
-
-make_720p()
+# def make_720p():
+#     cap.set(3, 1280)
+#     cap.set(4, 720)
+#
+# make_720p()
 width= int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height= int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 codec = cv2.VideoWriter_fourcc('M','P','E','G')
