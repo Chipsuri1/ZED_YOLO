@@ -579,11 +579,12 @@ def main(argv):
         else:
             key = cv2.waitKey(5)
 
+    log.info("\nFINISH")
+
     out.release()
     cv2.destroyAllWindows()
 
     zed.close()
-    log.info("\nFINISH")
 
 if __name__ == "__main__":
     main(sys.argv[1:])
