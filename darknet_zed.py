@@ -424,7 +424,7 @@ def main(argv):
 
     init_parameters = sl.InitParameters()
     init_parameters.coordinate_units = sl.UNIT.METER
-    init_parameters.camera_resolution = sl.RESOLUTION.HD1080
+    init_parameters.camera_resolution = sl.RESOLUTION.HD720
     init_parameters.camera_fps = 30
 
     if not zed.is_opened():
@@ -573,6 +573,7 @@ def main(argv):
             log.info(str(image.shape[0]) + " " + str(image.shape[1]))
             cv2.imshow("ZED", image)
             cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+            cv2.flip(image, 0)
             out.write(image)
             key = cv2.waitKey(5)
             if detections_zed:
