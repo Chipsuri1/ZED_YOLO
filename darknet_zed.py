@@ -487,16 +487,9 @@ def main(argv):
     color_array = generate_color(meta_path)
 
     log.info("Running...")
-    # cap = cv2.VideoCapture(1)
+
     codec = cv2.VideoWriter_fourcc('M','P','E','G')
-
-    output_path = sys.argv[0]
-    recording_param = sl.RecordingParameters(output_path, sl.SVO_COMPRESSION_MODE.H264)
-    err = zed.enable_recording(recording_param)
-
-    # out = cv2.VideoWriter('./processed.avi', -1, 30, (1280, 720))
-    # out = cv2.VideoWriter('./processed.avi', codec, 5, (1280, 720))
-    out = cv2.VideoWriter('./processed.avi', codec, 20.0, (720,1280))
+    out = cv2.VideoWriter('./basicvideo.avi', codec, 4, (1280, 720))
 
     key = ''
     count = 0
@@ -522,8 +515,6 @@ def main(argv):
                 detection_yolo = detections_yolo[i]
                 label = detection_yolo[0]
                 confidence = detection_yolo[1]
-                # pstring = label + ": " + str(np.rint(100 * confidence)) + "%"
-                # log.info(pstring)
                 bounds = detection_yolo[2]
                 y_extent = int(bounds[3])
                 x_extent = int(bounds[2])
@@ -576,10 +567,11 @@ def main(argv):
                               (x_coord + x_extent + thickness, y_coord + y_extent + thickness),
                               color_array[detection_yolo[3]], int(thickness * 2))
 
-            log.info(str(image.shape[0]) + " " + str(image.shape[1]))
             cv2.imshow("ZED", image)
-            # cv2.imwrite("frame%d.jpg" % count, image)
-            cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+            log.info(str(image.shape[0]) + " " + str(image.shape[1]))
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            image = cv2.resize(image, (1280, 720))
             out.write(image)
             count += 1
             key = cv2.waitKey(5)
@@ -590,12 +582,10 @@ def main(argv):
             key = cv2.waitKey(5)
 
     out.release()
-    # zed.disable_recording()
     cv2.destroyAllWindows()
 
     zed.close()
     log.info("\nFINISH")
-
 
 if __name__ == "__main__":
     main(sys.argv[1:])
