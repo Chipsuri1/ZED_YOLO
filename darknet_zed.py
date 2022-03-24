@@ -496,7 +496,7 @@ def main(argv):
 
     # out = cv2.VideoWriter('./processed.avi', -1, 30, (1280, 720))
     # out = cv2.VideoWriter('./processed.avi', codec, 5, (1280, 720))
-    out = cv2.VideoWriter('./processed.avi', codec, 5, (720, 1280))
+    out = cv2.VideoWriter('./processed.avi', codec, 20.0, (720,1280))
 
     key = ''
     count = 0
@@ -507,6 +507,7 @@ def main(argv):
             # get image from camera for yolo detection
             zed.retrieve_image(mat, sl.VIEW.LEFT)
             image = mat.get_data()
+            log.info(str(image.shape[0]) + " " + str(image.shape[1]))
 
             # get depth information of camera
             zed.retrieve_measure(point_cloud_mat, sl.MEASURE.XYZRGBA)
