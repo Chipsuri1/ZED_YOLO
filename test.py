@@ -12,6 +12,7 @@ while(cap.isOpened()):
     ret, frame = cap.read()
     if ret==True:
 
+        print(str(frame.shape[0]) + " " + str(frame.shape[1]))
         # write the flipped frame
         out.write(frame)
 
