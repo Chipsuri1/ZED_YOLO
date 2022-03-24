@@ -495,8 +495,8 @@ def main(argv):
     err = zed.enable_recording(recording_param)
 
     # out = cv2.VideoWriter('./processed.avi', -1, 30, (1280, 720))
-    # out = cv2.VideoWriter('./processed.avi', codec, 30, (1280, 720))
-    out = cv2.VideoWriter('./processed.avi', 4, 30, (720, 1280))
+    out = cv2.VideoWriter('./processed.avi', codec, 5, (1280, 720))
+    # out = cv2.VideoWriter('./processed.avi', 4, 30, (720, 1280))
 
     key = ''
     count = 0
