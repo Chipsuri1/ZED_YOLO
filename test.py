@@ -5,7 +5,7 @@ cap = cv2.VideoCapture(0)
 
 # Define the codec and create VideoWriter object
 fourcc = cv2.VideoWriter_fourcc('M','P','E','G')
-out = cv2.VideoWriter('output.avi',fourcc, 20.0, (1242,4416))
+out = cv2.VideoWriter('output.avi',fourcc, 20.0, (4416,1242))
 # out = cv2.VideoWriter('output.avi', -1, 20.0, (640,480))
 
 while(cap.isOpened()):
