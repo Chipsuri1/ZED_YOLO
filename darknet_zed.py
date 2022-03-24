@@ -488,11 +488,14 @@ def main(argv):
 
     log.info("Running...")
     # cap = cv2.VideoCapture(1)
-    codec = cv2.VideoWriter_fourcc('M','P','E','G')
+    # codec = cv2.VideoWriter_fourcc('M','P','E','G')
+
+    output_path = sys.argv[0]
+    err = zed.enable_recording(output_path, sl.SVO_COMPRESSION_MODE.H264)
 
     # out = cv2.VideoWriter('./processed.avi', -1, 30, (1280, 720))
     # out = cv2.VideoWriter('./processed.avi', codec, 30, (1280, 720))
-    out = cv2.VideoWriter('./processed.avi', codec, 30, (720, 1280))
+    # out = cv2.VideoWriter('./processed.avi', codec, 30, (720, 1280))
 
     key = ''
     while key != 113:  # for 'q' key
@@ -572,9 +575,10 @@ def main(argv):
 
             log.info(str(image.shape[0]) + " " + str(image.shape[1]))
             cv2.imshow("ZED", image)
-            cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-            cv2.flip(image, 0)
-            out.write(image)
+            zed.grab()
+            # cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+            # cv2.flip(image, 0)
+            # out.write(image)
             key = cv2.waitKey(5)
             if detections_zed:
                 log.info("ZED: " + str(len(detections_zed.object_list)) + " YOLO:" + str(len(detections_yolo)))
@@ -582,7 +586,8 @@ def main(argv):
         else:
             key = cv2.waitKey(5)
 
-    out.release()
+    # out.release()
+    zed.disable_recording()
     cv2.destroyAllWindows()
 
     zed.close()
