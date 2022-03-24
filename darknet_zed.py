@@ -488,7 +488,7 @@ def main(argv):
 
     log.info("Running...")
     # cap = cv2.VideoCapture(1)
-    # codec = cv2.VideoWriter_fourcc('M','P','E','G')
+    codec = cv2.VideoWriter_fourcc('M','P','E','G')
 
     output_path = sys.argv[0]
     recording_param = sl.RecordingParameters(output_path, sl.SVO_COMPRESSION_MODE.H264)
@@ -496,7 +496,7 @@ def main(argv):
 
     # out = cv2.VideoWriter('./processed.avi', -1, 30, (1280, 720))
     # out = cv2.VideoWriter('./processed.avi', codec, 30, (1280, 720))
-    # out = cv2.VideoWriter('./processed.avi', codec, 30, (720, 1280))
+    out = cv2.VideoWriter('./processed.avi', 4, 30, (720, 1280))
 
     key = ''
     count = 0
@@ -579,9 +579,9 @@ def main(argv):
             cv2.imshow("ZED", image)
             cv2.imwrite("frame%d.jpg" % count, image)
             # zed.grab()
-            # cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+            cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
             # cv2.flip(image, 0)
-            # out.write(image)
+            out.write(image)
             count += 1
             key = cv2.waitKey(5)
             if detections_zed:
