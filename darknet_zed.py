@@ -498,7 +498,7 @@ def main(argv):
 
     # Define the codec and create VideoWriter object.The output is stored in 'outpy.avi' file.
     # out = cv2.VideoWriter('outpy.avi', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10, ("480", "620"))
-    cap = cv2.VideoCapture(0)
+    # cap = cv2.VideoCapture(0)
     out = cv2.VideoWriter('output.avi', -1, 20.0, (640, 480))
 
     key = ''
