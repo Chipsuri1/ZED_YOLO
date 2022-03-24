@@ -591,7 +591,7 @@ def main(argv):
                               (x_coord + x_extent + thickness, y_coord + y_extent + thickness),
                               color_array[detection_yolo[3]], int(thickness * 2))
 
-            out.write(cv2.imshow("ZED", image))
+            cv2.imshow("ZED", image)
             # cv2.imshow("ZED", image)
             key = cv2.waitKey(5)
             if detections_zed:
