@@ -492,7 +492,7 @@ def main(argv):
     log.info("Running...")
 
     codec = cv2.VideoWriter_fourcc('M','P','E','G')
-    out = cv2.VideoWriter('./basicvideo.avi', codec, 4, (1280, 720))
+    out = cv2.VideoWriter('./basicvideo.avi', codec, 3, (1280, 720))
 
     key = ''
     while key != 113:  # for 'q' key
