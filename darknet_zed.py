@@ -424,7 +424,7 @@ def main(argv):
 
     init_parameters = sl.InitParameters()
     init_parameters.coordinate_units = sl.UNIT.METER
-    init_parameters.camera_resolution = sl.RESOLUTION.HD720
+    init_parameters.camera_resolution = sl.RESOLUTION.HD1080
     init_parameters.camera_fps = 30
 
     if not zed.is_opened():
