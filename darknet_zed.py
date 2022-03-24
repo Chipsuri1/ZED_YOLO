@@ -497,7 +497,9 @@ def main(argv):
     # frame_height = int(cap.get(4))
 
     # Define the codec and create VideoWriter object.The output is stored in 'outpy.avi' file.
-    out = cv2.VideoWriter('outpy.avi', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10, ("480", "620"))
+    # out = cv2.VideoWriter('outpy.avi', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10, ("480", "620"))
+    cap = cv2.VideoCapture(0)
+    out = cv2.VideoWriter('output.avi', -1, 20.0, (640, 480))
 
     key = ''
     while key != 113:  # for 'q' key
@@ -513,7 +515,7 @@ def main(argv):
             # if ret == True:
 
                 # Write the frame into the file 'output.avi'
-            out.write(image)
+            # out.write(image)
 
             # get depth information of camera
             zed.retrieve_measure(point_cloud_mat, sl.MEASURE.XYZRGBA)
@@ -560,7 +562,7 @@ def main(argv):
                     object_velocity = math.sqrt(
                         object_velocity_x * object_velocity_x + object_velocity_y * object_velocity_y + object_velocity_z * object_velocity_z)
 
-                    log.info("ObjectID: " + str(object_id))
+                    #log.info("ObjectID: " + str(object_id))
 
                 else:
                     object_height = 0
@@ -589,7 +591,8 @@ def main(argv):
                               (x_coord + x_extent + thickness, y_coord + y_extent + thickness),
                               color_array[detection_yolo[3]], int(thickness * 2))
 
-            cv2.imshow("ZED", image)
+            out.write(cv2.imshow("ZED", image))
+            # cv2.imshow("ZED", image)
             key = cv2.waitKey(5)
             if detections_zed:
                 log.info("ZED: " + str(len(detections_zed.object_list)) + " YOLO:" + str(len(detections_yolo)))
