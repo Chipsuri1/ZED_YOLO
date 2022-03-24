@@ -4,10 +4,10 @@ import cv2
 cap = cv2.VideoCapture(0)
 
 
-width = 1280
-height = 720
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+# width = 1280
+# height = 720
+# cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+# cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 # Define the codec and create VideoWriter object
 fourcc = cv2.VideoWriter_fourcc('M','P','E','G')
 out = cv2.VideoWriter('output.avi',fourcc, 20.0, (1280,720))
