@@ -21,12 +21,20 @@ writer= cv2.VideoWriter('./basicvideo.mp4', codec, 20, (1920,1080))
 # Create an RGBA sl.Mat object
 image_zed = sl.Mat(zed.get_camera_information().camera_resolution.width, zed.get_camera_information().camera_resolution.height, sl.MAT_TYPE.U8_C4)
 
+runtime_parameters = sl.RuntimeParameters()
+runtime_parameters.sensing_mode = sl.SENSING_MODE.STANDARD
+mat = sl.Mat()
+point_cloud_mat = sl.Mat()
+
 while True:
-    image_ocv = image_zed.get_data()
+    if zed.grab(runtime_parameters) == sl.ERROR_CODE.SUCCESS:
+        # get image from camera for yolo detection
+        zed.retrieve_image(mat, sl.VIEW.LEFT)
+        image = mat.get_data()
 
-    writer.write(image_ocv)
+    writer.write(image)
 
-    cv2.imshow('frame', image_ocv)
+    cv2.imshow('frame', image)
 
     if cv2.waitKey(1) & 0xFF == 27:
         break
