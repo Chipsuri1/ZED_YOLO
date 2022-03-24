@@ -422,7 +422,6 @@ def main(argv):
 
     zed = sl.Camera()
 
-    # init_parameters = sl.InitParameters(input_t=input_type)
     init_parameters = sl.InitParameters()
     init_parameters.coordinate_units = sl.UNIT.METER
     init_parameters.camera_resolution = sl.RESOLUTION.HD720
@@ -488,18 +487,10 @@ def main(argv):
     color_array = generate_color(meta_path)
 
     log.info("Running...")
-    # Create a VideoCapture object
-    # cap = cv2.VideoCapture(0)
-    #
-    # # Default resolutions of the frame are obtained.The default resolutions are system dependent.
-    # # We convert the resolutions from float to integer.
-    # frame_width = int(cap.get(3))
-    # frame_height = int(cap.get(4))
 
-    # Define the codec and create VideoWriter object.The output is stored in 'outpy.avi' file.
-    # out = cv2.VideoWriter('outpy.avi', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10, ("480", "620"))
-    # cap = cv2.VideoCapture(0)
-    #out = cv2.VideoWriter('output.avi', -1, 20.0, (640, 480))
+    codec = cv2.VideoWriter_fourcc(*"MJPG")
+
+    out = cv2.VideoWriter('./processed.avi', codec, 10, (1280, 720))
 
     key = ''
     while key != 113:  # for 'q' key
@@ -509,13 +500,6 @@ def main(argv):
             # get image from camera for yolo detection
             zed.retrieve_image(mat, sl.VIEW.LEFT)
             image = mat.get_data()
-            # ret, frame = cap.read()
-
-            # Write the frame into the file 'output.avi'
-            # if ret == True:
-
-                # Write the frame into the file 'output.avi'
-            # out.write(image)
 
             # get depth information of camera
             zed.retrieve_measure(point_cloud_mat, sl.MEASURE.XYZRGBA)
@@ -543,13 +527,8 @@ def main(argv):
                 distance = math.sqrt(x * x + y * y + z * z)
                 distance = "{:.2f}".format(distance)
 
-                # print("lenZED: " + str(len(detections_zed.object_list)))
-                # print("lenYolo: " + str(len(detections_yolo)))
-
                 if len(detections_zed.object_list) >= len(detections_yolo):
                     detection_zed = detections_zed.object_list[i]
-                    # detection_zed = sl.ObjectData()
-                    # detections_zed.get_object_data_from_id(detection_zed, i)  # Get the object with ID = i
 
                     object_id = detection_zed.id  # Get the object id
                     object_label = detection_zed.label  # Get the object label
@@ -561,8 +540,6 @@ def main(argv):
 
                     object_velocity = math.sqrt(
                         object_velocity_x * object_velocity_x + object_velocity_y * object_velocity_y + object_velocity_z * object_velocity_z)
-
-                    #log.info("ObjectID: " + str(object_id))
 
                 else:
                     object_height = 0
@@ -591,8 +568,8 @@ def main(argv):
                               (x_coord + x_extent + thickness, y_coord + y_extent + thickness),
                               color_array[detection_yolo[3]], int(thickness * 2))
 
+            out.write(image)
             cv2.imshow("ZED", image)
-            # cv2.imshow("ZED", image)
             key = cv2.waitKey(5)
             if detections_zed:
                 log.info("ZED: " + str(len(detections_zed.object_list)) + " YOLO:" + str(len(detections_yolo)))
