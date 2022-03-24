@@ -507,9 +507,13 @@ def main(argv):
             # get image from camera for yolo detection
             zed.retrieve_image(mat, sl.VIEW.LEFT)
             image = mat.get_data()
+            ret, frame = cap.read()
 
             # Write the frame into the file 'output.avi'
-            out.write(image)
+            if ret == True:
+
+                # Write the frame into the file 'output.avi'
+                out.write(image)
 
             # get depth information of camera
             zed.retrieve_measure(point_cloud_mat, sl.MEASURE.XYZRGBA)
