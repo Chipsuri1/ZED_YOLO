@@ -484,8 +484,8 @@ def main(argv):
 
     log.info("Running...")
 
-    codec = cv2.VideoWriter_fourcc('M','P','E','G')
-    out = cv2.VideoWriter('./basicvideo.avi', codec, 3, (1280, 720))
+    codec = cv2.VideoWriter_fourcc(*'mp4v')
+    out = cv2.VideoWriter('./basicvideo.mp4', codec, 3, (1280, 720))
 
     key = ''
     while key != 113:  # for 'q' key
@@ -579,7 +579,7 @@ def main(argv):
         else:
             key = cv2.waitKey(5)
 
-    log.info("\nFINISH")
+    log.info("FINISH")
 
     out.release()
     cv2.destroyAllWindows()
